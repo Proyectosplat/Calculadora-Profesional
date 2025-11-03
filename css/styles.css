@@ -653,3 +653,98 @@ header p {
         border: 1px solid #ddd;
     }
 }
+/* ========================================
+   ESTILOS PWA - BOTÓN DE INSTALACIÓN
+======================================== */
+
+.btn-instalar-pwa {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    z-index: 10001;
+    transition: all 0.3s ease;
+    animation: pulseInstall 2s infinite;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-instalar-pwa:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.6);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-instalar-pwa:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+@keyframes pulseInstall {
+    0%, 100% {
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.8);
+    }
+}
+
+/* Badge offline */
+.offline-badge {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff9800;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Responsive PWA Button */
+@media (max-width: 768px) {
+    .btn-instalar-pwa {
+        top: 15px;
+        right: 15px;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-instalar-pwa {
+        top: 10px;
+        right: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Ajuste del z-index del botón de historial */
+.btn-historial-flotante {
+    z-index: 1000;
+}

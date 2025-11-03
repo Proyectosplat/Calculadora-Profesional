@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadoras Profesionales</title>
     <link rel="stylesheet" href="css/styles.css">
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CalcPro">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Calculadoras especializadas para Ingenieros, Contadores y Economistas">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
     
     <!-- Chart.js para gráficas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -49,7 +70,77 @@
     <button class="btn-historial-flotante" onclick="mostrarVistaHistorial()" title="Ver Historial">
         📋
     </button>
+    <!-- PWA Install & Service Worker -->
+    <script>
+    // Registrar Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('✅ Service Worker registrado:', registration.scope);
+          })
+          .catch(error => {
+            console.log('❌ Error al registrar Service Worker:', error);
+          });
+      });
+    }
 
+    // Botón de instalación PWA
+    let deferredPrompt;
+    const installButton = document.createElement('button');
+    installButton.className = 'btn-instalar-pwa';
+    installButton.innerHTML = '📱 Instalar App';
+    installButton.style.display = 'none';
+    document.body.appendChild(installButton);
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'block';
+      
+      setTimeout(() => {
+        if(typeof mostrarNotificacion === 'function') {
+          mostrarNotificacion('💡 ¡Puedes instalar esta app en tu dispositivo!');
+        }
+      }, 3000);
+    });
+
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+          if(typeof mostrarNotificacion === 'function') {
+            mostrarNotificacion('✅ ¡App instalada exitosamente!');
+          }
+          installButton.style.display = 'none';
+        }
+        
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      if(typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('✅ ¡App instalada! Ahora puedes usarla desde tu pantalla de inicio');
+      }
+      installButton.style.display = 'none';
+    });
+
+    // Detectar modo offline
+    window.addEventListener('online', () => {
+      if(typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('✅ Conexión restaurada');
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      if(typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('⚠️ Sin conexión - Modo offline activado', 'warning');
+      }
+    });
+    </script>
     <!-- Scripts -->
     <script src="js/graficas.js"></script>
     <script src="js/historial.js"></script>
